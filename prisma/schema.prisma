@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 用户创建的课程（作为教师）
+  createdCourses Course[] @relation("TeacherCourses")
+
+  // 用户购买的课程（作为学生）
+  purchasedCourses UserCourse[]
+
+  @@map("users")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  price       Float    @default(0)
+  cover       String?
+  teacherId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 创建课程的教师
+  teacher User @relation("TeacherCourses", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  // 购买此课程的学生
+  purchasedBy UserCourse[]
+
+  @@map("courses")
+}
+
+model UserCourse {
+  id           String   @id @default(cuid())
+  userId       String
+  courseId     String
+  purchasedAt  DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@map("user_courses")
+}

@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Course {
+  cover: String
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  price: Float!
+  teacherId: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+input CreateCourseInput {
+  cover: String
+  description: String
+  price: Float! = 0
+  teacherId: String!
+  title: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createCourse(createCourseInput: CreateCourseInput!): Course!
+  deleteCourse(id: String!): Course!
+  updateCourse(id: String!, updateCourseInput: UpdateCourseInput!): Course!
+}
+
+type Query {
+  course(id: String!): Course!
+  courses: [Course!]!
+  coursesByTeacher(teacherId: String!): [Course!]!
+}
+
+input UpdateCourseInput {
+  cover: String
+  description: String
+  price: Float
+  title: String
+}
