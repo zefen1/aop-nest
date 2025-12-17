@@ -1,6 +1,14 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { config } from 'dotenv';
+import pg from 'pg';
 
-const prisma = new PrismaClient();
+// 加载环境变量
+config();
+
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('🌱 开始填充测试数据...');
