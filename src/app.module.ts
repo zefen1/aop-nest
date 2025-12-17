@@ -16,6 +16,8 @@ import { CourseModule } from './course/course.module';
       playground: true,
       path: '/graphql',
       introspection: true,
+      csrfPrevention: false, // 开发环境关闭 CSRF 保护
+
     }),
     PrismaModule,
     CourseModule,
@@ -23,4 +25,4 @@ import { CourseModule } from './course/course.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
